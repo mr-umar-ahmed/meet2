@@ -33,7 +33,7 @@ class Reminder(db.Model):
 @app.route('/')
 def index():
     reminders = Reminder.query.all()
-    return render_template('index.html', reminders=reminders, api_key=GMAPS_API_KEY)
+    return render_template('index.html', reminders=reminders, api_key=AIzaSyD8W4GWpiFBh3ZLPedSToInNftoTKAwgoA)
 
 @app.route('/add', methods=['POST'])
 def add_reminder():
