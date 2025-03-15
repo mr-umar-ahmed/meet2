@@ -1,0 +1,56 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+/* Map Section */
+#map-container {
+    margin: 20px auto;
+    max-width: 1200px;
+    width: 100%;
+}
+
+/* Reminders List */
+#reminders-list {
+    margin: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#reminders-list h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+#reminders-list ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#reminders-list li {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#reminders-list li strong {
+  
