@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Reminder - Simple Task Reminder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Add a New Reminder</h1>
+    </header>
+
+    <section id="add-reminder-form">
+        <form action="{{ url_for('add_reminder') }}" method="POST">
+            <label for="title">Reminder Title:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+
+            <label for="location">Location (Latitude, Longitude):</label>
+            <input type="text" id="location" name="location" placeholder="e.g., 40.7128, -74.0060" required>
+
+            <label for="reminder_time">Reminder Time:</label>
+            <input type="datetime-local" id="reminder_time" name="reminder_time" required>
+
+            <button type="submit">Add Reminder</button>
+        </form>
+    </section>
+
+    <footer>
+        <a href="{{ url_for('index') }}" class="back-to-home-button">Back to Home</a>
+    </footer>
+
+</body>
+</html>
