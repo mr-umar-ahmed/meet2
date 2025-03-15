@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Task Reminder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Include any other CSS or libraries you may need -->
+</head>
+<body>
+    <header>
+        <h1>Simple Task Reminder</h1>
+    </header>
+
+    <!-- Map Section -->
+    <section id="map-container">
+        <div id="map" style="height: 400px;"></div>
+    </section>
+
+    <!-- Reminders List Section -->
+    <section id="reminders-list">
+        <h2>Upcoming Reminders</h2>
+        <ul>
+            <!-- Loop through reminders from Flask context -->
+            {% for reminder in reminders %}
+                <li>
+                    <strong>{{ reminder.title }}</strong>
+                    <p>{{ reminder.description }}</p>
+                    <p><strong>Location:</strong> {{ reminder.location }}</p>
+                    <p><strong>Time:</strong> {{ reminder.reminder_time }}</p>
+                </li>
+            {% else %}
+                <li>No reminders yet.</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <!-- Add Reminder Button -->
+    <footer>
+        <a href="{{ url_for('add_reminder') }}" class="add-reminder-button">Add New Reminder</a>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
