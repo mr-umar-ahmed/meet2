@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import googlemaps
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Initialize Flask App
 app = Flask(__name__)
@@ -10,8 +15,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# Google Maps API Key (Replace with your own key)
-GMAPS_API_KEY = "YOUR_GOOGLE_MAPS_API_KEY"
+# Google Maps API Key (Load from .env file)
+GMAPS_API_KEY = os.getenv("GMAPS_API_KEY")
+if not GMAPS_API_KEY:
+    raise ValueError("⚠️ Google Maps API Key is missing. Set GMAPS_API_KEY in .env file.")
+
 gmaps = googlemaps.Client(key=GMAPS_API_KEY)
 
 # Database Model
@@ -21,38 +29,46 @@ class Reminder(db.Model):
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
 
-# Create Database Tables
-with app.app_context():
-    db.create_all()
-
 # Routes
 @app.route('/')
 def index():
-    # Fetch all reminders from the database
     reminders = Reminder.query.all()
     return render_template('index.html', reminders=reminders, api_key=GMAPS_API_KEY)
 
 @app.route('/add', methods=['POST'])
 def add_reminder():
-    # Get form data
-    task = request.form.get('task')
-    latitude = float(request.form.get('latitude'))
-    longitude = float(request.form.get('longitude'))
+    try:
+        task = request.form.get('task')
+        latitude = request.form.get('latitude')
+        longitude = request.form.get('longitude')
 
-    # Create a new reminder
-    new_reminder = Reminder(task=task, latitude=latitude, longitude=longitude)
-    db.session.add(new_reminder)
-    db.session.commit()
+        # Validate input
+        if not task or not latitude or not longitude:
+            return "⚠️ Error: Task and Location are required.", 400
 
-    # Redirect to the home page
-    return redirect(url_for('index'))
+        latitude, longitude = float(latitude), float(longitude)
 
-@app.route('/reminders')
+        # Save to database
+        new_reminder = Reminder(task=task, latitude=latitude, longitude=longitude)
+        db.session.add(new_reminder)
+        db.session.commit()
+
+        return redirect(url_for('index'))
+    
+    except ValueError:
+        return "⚠️ Invalid latitude/longitude values.", 400
+
+@app.route('/get_reminders', methods=['GET'])
 def get_reminders():
-    # Fetch all reminders and return as JSON
     reminders = Reminder.query.all()
-    reminders_data = [{"id": r.id, "task": r.task, "latitude": r.latitude, "longitude": r.longitude} for r in reminders]
-    return jsonify(reminders_data)
+    return jsonify([
+        {"task": r.task, "lat": r.latitude, "lng": r.longitude} 
+        for r in reminders
+    ])
 
 if __name__ == '__main__':
+    # Ensure database is initialized
+    with app.app_context():
+        db.create_all()
+    
     app.run(debug=True)
