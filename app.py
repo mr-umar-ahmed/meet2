@@ -16,11 +16,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Google Maps API Key (Load from .env file)
-GMAPS_API_KEY = os.getenv("GMAPS_API_KEY")
+GMAPS_API_KEY = os.getenv("AIzaSyD8W4GWpiFBh3ZLPedSToInNftoTKAwgoA")
 if not GMAPS_API_KEY:
     raise ValueError("⚠️ Google Maps API Key is missing. Set GMAPS_API_KEY in .env file.")
 
-gmaps = googlemaps.Client(key=GMAPS_API_KEY)
+gmaps = googlemaps.Client(key=AIzaSyD8W4GWpiFBh3ZLPedSToInNftoTKAwgoA)
 
 # Database Model
 class Reminder(db.Model):
@@ -33,7 +33,7 @@ class Reminder(db.Model):
 @app.route('/')
 def index():
     reminders = Reminder.query.all()
-    return render_template('index.html', reminders=reminders, api_key=GMAPS_API_KEY)
+    return render_template('index.html', reminders=reminders, api_key=AIzaSyD8W4GWpiFBh3ZLPedSToInNftoTKAwgoA)
 
 @app.route('/add', methods=['POST'])
 def add_reminder():
