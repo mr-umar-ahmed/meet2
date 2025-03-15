@@ -17,21 +17,6 @@
         <div id="map" style="height: 400px;"></div>
     </section>
 
-    <!-- Reminders List Section -->
-    <section id="reminders-list">
-        <h2>Upcoming Reminders</h2>
-        <ul>
-            {% for reminder in reminders %}
-                <li>
-                    <strong>{{ reminder.task }}</strong>
-                    <p><strong>Location:</strong> Latitude: {{ reminder.latitude }}, Longitude: {{ reminder.longitude }}</p>
-                </li>
-            {% else %}
-                <li>No reminders yet.</li>
-            {% endfor %}
-        </ul>
-    </section>
-
     <!-- Add Reminder Form -->
     <section id="add-reminder">
         <h2>Add a New Reminder</h2>
@@ -41,6 +26,21 @@
             <input type="hidden" id="longitude" name="longitude">
             <button type="submit">Add Reminder</button>
         </form>
+    </section>
+
+    <!-- Reminders List Section -->
+    <section id="reminders-list">
+        <h2>Upcoming Reminders</h2>
+        <ul id="reminders">
+            {% for reminder in reminders %}
+                <li>
+                    <strong>{{ reminder.task }}</strong>
+                    <p><strong>Location:</strong> Latitude: {{ reminder.latitude }}, Longitude: {{ reminder.longitude }}</p>
+                </li>
+            {% else %}
+                <li>No reminders yet.</li>
+            {% endfor %}
+        </ul>
     </section>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>

@@ -4,7 +4,7 @@ import googlemaps
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
+# Load environment variables from .env file
 load_dotenv()
 
 # Initialize Flask App
@@ -16,11 +16,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Google Maps API Key (Load from .env file)
-GMAPS_API_KEY = os.getenv("AIzaSyD8W4GWpiFBh3ZLPedSToInNftoTKAwgoA")
+GMAPS_API_KEY = os.getenv("GMAPS_API_KEY")
 if not GMAPS_API_KEY:
     raise ValueError("⚠️ Google Maps API Key is missing. Set GMAPS_API_KEY in .env file.")
 
-gmaps = googlemaps.Client(key=AIzaSyD8W4GWpiFBh3ZLPedSToInNftoTKAwgoA)
+gmaps = googlemaps.Client(key=GMAPS_API_KEY)
 
 # Database Model
 class Reminder(db.Model):
@@ -33,11 +33,12 @@ class Reminder(db.Model):
 @app.route('/')
 def index():
     reminders = Reminder.query.all()
-    return render_template('index.html', reminders=reminders, api_key=AIzaSyD8W4GWpiFBh3ZLPedSToInNftoTKAwgoA)
+    return render_template('index.html', reminders=reminders, api_key=GMAPS_API_KEY)
 
 @app.route('/add', methods=['POST'])
 def add_reminder():
     try:
+        # Get form data
         task = request.form.get('task')
         latitude = request.form.get('latitude')
         longitude = request.form.get('longitude')
@@ -62,13 +63,14 @@ def add_reminder():
 def get_reminders():
     reminders = Reminder.query.all()
     return jsonify([
-        {"task": r.task, "lat": r.latitude, "lng": r.longitude} 
+        {"id": r.id, "task": r.task, "latitude": r.latitude, "longitude": r.longitude}
         for r in reminders
     ])
 
 if __name__ == '__main__':
-    # Ensure database is initialized
+    # Ensure database tables are created
     with app.app_context():
         db.create_all()
     
+    # Run the app
     app.run(debug=os.getenv("FLASK_DEBUG", "True").lower() == "true")
