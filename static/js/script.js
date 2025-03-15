@@ -10,7 +10,7 @@ function initMap() {
         zoom: 13,
     });
 
-    // Load saved reminders
+    // Load saved reminders from the server
     fetchReminders();
 
     // Add click event to select location for new reminder
@@ -86,7 +86,7 @@ function trackUserLocation() {
                     });
                 }
 
-                // Check proximity to reminders
+                // Check proximity to reminders (could be part of future AI functionality)
                 checkProximity(userLocation);
             },
             (error) => {
