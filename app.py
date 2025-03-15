@@ -33,7 +33,7 @@ class Reminder(db.Model):
 @app.route('/')
 def index():
     reminders = Reminder.query.all()
-    return render_template('index.html', reminders=reminders, api_key=AIzaSyD8W4GWpiFBh3ZLPedSToInNftoTKAwgoA)
+    return render_template('index.html', reminders=reminders, api_key=GMAPS_API_KEY)
 
 @app.route('/add', methods=['POST'])
 def add_reminder():
@@ -58,7 +58,7 @@ def add_reminder():
     except ValueError:
         return "⚠️ Invalid latitude/longitude values.", 400
 
-@app.route('/get_reminders', methods=['GET'])
+@app.route('/reminders', methods=['GET'])
 def get_reminders():
     reminders = Reminder.query.all()
     return jsonify([
@@ -71,4 +71,4 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     
-    app.run(debug=True)
+    app.run(debug=os.getenv("FLASK_DEBUG", "True").lower() == "true")

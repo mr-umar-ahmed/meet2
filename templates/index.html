@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Task Reminder</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <!-- Include any other CSS or libraries you may need -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}"></script>
 </head>
 <body>
     <header>
@@ -22,13 +21,10 @@
     <section id="reminders-list">
         <h2>Upcoming Reminders</h2>
         <ul>
-            <!-- Loop through reminders from Flask context -->
             {% for reminder in reminders %}
                 <li>
-                    <strong>{{ reminder.title }}</strong>
-                    <p>{{ reminder.description }}</p>
-                    <p><strong>Location:</strong> {{ reminder.location }}</p>
-                    <p><strong>Time:</strong> {{ reminder.reminder_time }}</p>
+                    <strong>{{ reminder.task }}</strong>
+                    <p><strong>Location:</strong> Latitude: {{ reminder.latitude }}, Longitude: {{ reminder.longitude }}</p>
                 </li>
             {% else %}
                 <li>No reminders yet.</li>
@@ -36,12 +32,17 @@
         </ul>
     </section>
 
-    <!-- Add Reminder Button -->
-    <footer>
-        <a href="{{ url_for('add_reminder') }}" class="add-reminder-button">Add New Reminder</a>
-    </footer>
+    <!-- Add Reminder Form -->
+    <section id="add-reminder">
+        <h2>Add a New Reminder</h2>
+        <form id="reminder-form">
+            <input type="text" id="task" placeholder="Enter task" required>
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+            <button type="submit">Add Reminder</button>
+        </form>
+    </section>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
